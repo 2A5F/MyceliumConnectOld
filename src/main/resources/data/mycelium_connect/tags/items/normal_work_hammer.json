@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mycelium_connect:work_hammer",
+    "mycelium_connect:stone_work_hammer",
+    "mycelium_connect:iron_work_hammer",
+    "mycelium_connect:golden_work_hammer",
+    "mycelium_connect:diamond_work_hammer"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mycelium_connect:item/golden_work_hammer"
+  }
+}

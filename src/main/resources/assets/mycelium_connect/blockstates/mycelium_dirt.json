@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "mycelium_connect:block/mycelium_dirt"
+      },
+      {
+        "model": "mycelium_connect:block/mycelium_dirt_2"
+      }
+    ]
+  }
+}

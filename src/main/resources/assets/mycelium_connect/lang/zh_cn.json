@@ -1,0 +1,20 @@
+{
+  "itemGroup.mycelium_connect": "菌丝连接",
+
+  "block.mycelium_connect.fungi": "菌",
+
+  "block.mycelium_connect.mycelium_dirt": "菌土",
+
+  "item.mycelium_connect.work_hammer": "工作锤",
+  "item.mycelium_connect.stone_work_hammer": "石工作锤",
+  "item.mycelium_connect.iron_work_hammer": "铁工作锤",
+  "item.mycelium_connect.golden_work_hammer": "金工作锤",
+  "item.mycelium_connect.diamond_work_hammer": "钻石工作锤",
+  "item.mycelium_connect.netherite_work_hammer": "下界合金工作锤",
+
+  "item.mycelium_connect.glass_shards": "碎玻璃",
+  "item.mycelium_connect.glass_dust": "玻璃粉",
+  "item.mycelium_connect.glass_nugget": "玻璃粒",
+
+  "_": ""
+}

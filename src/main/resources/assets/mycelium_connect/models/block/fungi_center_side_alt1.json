@@ -1,0 +1,6 @@
+{
+    "parent": "mycelium_connect:block/fungi_center_side_alt",
+    "textures": {
+        "line": "mycelium_connect:block/fungi_line1"
+    }
+}

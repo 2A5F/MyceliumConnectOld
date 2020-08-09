@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mycelium_connect:item/glass_nugget"
+  }
+}

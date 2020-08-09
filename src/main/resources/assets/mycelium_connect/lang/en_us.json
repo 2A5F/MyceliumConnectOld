@@ -1,0 +1,20 @@
+{
+  "itemGroup.mycelium_connect": "Mycelium Connect",
+
+  "block.mycelium_connect.fungi": "Fungi",
+
+  "block.mycelium_connect.mycelium_dirt": "Mycelium Dirt",
+
+  "item.mycelium_connect.work_hammer": "Work Hammer",
+  "item.mycelium_connect.stone_work_hammer": "Stone Work Hammer",
+  "item.mycelium_connect.iron_work_hammer": "Iron Work Hammer",
+  "item.mycelium_connect.golden_work_hammer": "Golden Work Hammer",
+  "item.mycelium_connect.diamond_work_hammer": "Diamond Work Hammer",
+  "item.mycelium_connect.netherite_work_hammer": "Netherite Work Hammer",
+
+  "item.mycelium_connect.glass_shards": "Glass Shards",
+  "item.mycelium_connect.glass_dust": "Glass Dust",
+  "item.mycelium_connect.glass_nugget": "Glass Nugget",
+
+  "_": ""
+}

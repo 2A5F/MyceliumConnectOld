@@ -1,0 +1,7 @@
+{
+  "parent": "mycelium_connect:block/mycelium_dirt",
+  "textures": {
+    "all": "mycelium_connect:block/mycelium_dirt_2",
+    "overlay": "mycelium_connect:block/mycelium_dirt_overlay_2"
+  }
+}

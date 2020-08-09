@@ -1,0 +1,297 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "south": "none",
+        "north": "none",
+        "east": "none",
+        "west": "none"
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_center"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "side|up",
+            "east": "side|up"
+          },
+          {
+            "south": "side|up",
+            "east": "side|up"
+          },
+          {
+            "south": "side|up",
+            "west": "side|up"
+          },
+          {
+            "north": "side|up",
+            "west": "side|up"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_center_lines"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_lines",
+          "y": 90
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_lines",
+          "y": 180
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_lines",
+          "y": 270
+        }
+      ]
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "side|up",
+            "east": "side|up"
+          },
+          {
+            "south": "side|up",
+            "east": "side|up"
+          },
+          {
+            "south": "side|up",
+            "west": "side|up"
+          },
+          {
+            "north": "side|up",
+            "west": "side|up"
+          }
+        ]
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_center_dot"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_dot",
+          "y": 90
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_dot",
+          "y": 180
+        },
+        {
+          "model": "mycelium_connect:block/fungi_center_dot",
+          "y": 270
+        }
+      ]
+    },
+
+    {
+      "when": {
+        "east": "none",
+        "west": "none",
+        "north": "side|up"
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_side0"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side1"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side0",
+          "y": 180
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side1",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "east": "none",
+        "west": "none",
+        "south": "side|up"
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_side_alt0"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt1"
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt0",
+          "y": 180
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt1",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "when": {
+        "south": "none",
+        "north": "none",
+        "east": "side|up"
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_side_alt1",
+          "y": 270
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt0",
+          "y": 270
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt1",
+          "y": 90
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side_alt0",
+          "y": 90
+        }
+      ]
+    },
+    {
+      "when": {
+        "south": "none",
+        "north": "none",
+        "west": "side|up"
+      },
+      "apply": [
+        {
+          "model": "mycelium_connect:block/fungi_side1",
+          "y": 270
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side0",
+          "y": 270
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side1",
+          "y": 90
+        },
+        {
+          "model": "mycelium_connect:block/fungi_side0",
+          "y": 90
+        }
+      ]
+    },
+
+    {
+      "when": {
+        "OR": [
+          {
+            "west": "side|up",
+            "north": "side|up"
+          },
+          {
+            "east": "side|up",
+            "north": "side|up"
+          }
+        ]
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_center_side0"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "west": "side|up",
+            "south": "side|up"
+          },
+          {
+            "east": "side|up",
+            "south": "side|up"
+          }
+        ]
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_center_side_alt0"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "side|up",
+            "east": "side|up"
+          },
+          {
+            "south": "side|up",
+            "east": "side|up"
+          }
+        ]
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_center_side_alt1",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "north": "side|up",
+            "west": "side|up"
+          },
+          {
+            "south": "side|up",
+            "west": "side|up"
+          }
+        ]
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_center_side1",
+        "y": 270
+      }
+    },
+
+    {
+      "when": {
+        "north": "up"
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_up"
+      }
+    },
+    {
+      "when": {
+        "east": "up"
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_up",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "up"
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_up",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "up"
+      },
+      "apply": {
+        "model": "mycelium_connect:block/fungi_up",
+        "y": 270
+      }
+    }
+  ]
+}
