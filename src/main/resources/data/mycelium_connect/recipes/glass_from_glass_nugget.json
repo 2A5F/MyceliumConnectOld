@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "mycelium_connect:glass_nugget",
+    "count": 8
+  },
+  "result": "minecraft:glass",
+  "experience": 0,
+  "cookingtime": 200
+}

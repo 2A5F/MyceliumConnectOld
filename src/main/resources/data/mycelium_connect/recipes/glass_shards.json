@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "tag": "mycelium_connect:work_hammer"
+    }
+  ],
+  "result": {
+    "item": "mycelium_connect:glass_shards",
+    "count": 2
+  }
+}

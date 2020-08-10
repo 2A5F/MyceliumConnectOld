@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "mycelium_connect:block/glass_kiln_top",
+    "front": "mycelium_connect:block/glass_kiln_front",
+    "side": "mycelium_connect:block/glass_kiln_side",
+    "bottom": "mycelium_connect:block/glass_kiln_bottom"
+  }
+}
