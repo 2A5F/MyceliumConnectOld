@@ -5,12 +5,14 @@ import co.volight.mycelium_connect.MCCStats;
 import co.volight.mycelium_connect.blocks.MyceliumDirt;
 import co.volight.mycelium_connect.blocks.fungi.Fungi;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKiln;
+import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnContainer;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnTileEntity;
 import co.volight.mycelium_connect.items.GlassDust;
 import co.volight.mycelium_connect.items.GlassNugget;
 import co.volight.mycelium_connect.items.GlassShards;
 import co.volight.mycelium_connect.items.WorkHammer;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.stats.IStatFormatter;
@@ -31,6 +33,7 @@ public class CommonSetup {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::onRegisterBlocks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::onRegisterItems);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::onRegisterTileEntices);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::onRegisterContainerTypes);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::onRegisterRecipeSerializers);
     }
 
@@ -71,6 +74,11 @@ public class CommonSetup {
     @SubscribeEvent
     public void onRegisterTileEntices(RegistryEvent.Register<TileEntityType<?>> e) {
         e.getRegistry().register(GlassKilnTileEntity.type);
+    }
+
+    @SubscribeEvent
+    public void onRegisterContainerTypes(RegistryEvent.Register<ContainerType<?>> e) {
+        e.getRegistry().register(GlassKilnContainer.type);
     }
 
     @SubscribeEvent

@@ -9,6 +9,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -17,6 +19,8 @@ import javax.annotation.Nonnull;
 
 public class GlassKiln extends AbstractFurnaceBlock implements Itemization {
     public static final String name = "glass_kiln";
+
+    public static final IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
 
     public GlassKiln() {
         this(Properties.create(Material.IRON, MaterialColor.IRON).hardnessAndResistance(5.0F, 3.0F).sound(SoundType.METAL));
