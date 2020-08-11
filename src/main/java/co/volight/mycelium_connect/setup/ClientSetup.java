@@ -38,6 +38,8 @@ public class ClientSetup {
         RenderTypeLookup.setRenderLayer(MCCBlocks.fungi, RenderType.getCutout());
 
         RenderTypeLookup.setRenderLayer(MCCBlocks.myceliumDirt, RenderType.getCutout());
+
+        RenderTypeLookup.setRenderLayer(MCCBlocks.glassJar, RenderType.getCutoutMipped());
     }
 
     public void onRegisterBlockColors(FMLCommonSetupEvent e) {

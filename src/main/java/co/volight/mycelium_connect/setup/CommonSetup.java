@@ -4,6 +4,7 @@ import co.volight.mycelium_connect.MCCBlocks;
 import co.volight.mycelium_connect.MCCStats;
 import co.volight.mycelium_connect.blocks.MyceliumDirt;
 import co.volight.mycelium_connect.blocks.fungi.Fungi;
+import co.volight.mycelium_connect.blocks.jar.GlassJar;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKiln;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnContainer;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnTileEntity;
@@ -46,6 +47,8 @@ public class CommonSetup {
         e.getRegistry().register(new MyceliumDirt());
 
         e.getRegistry().register(new GlassKiln());
+
+        e.getRegistry().register(new GlassJar());
     }
 
     @SubscribeEvent
@@ -71,6 +74,8 @@ public class CommonSetup {
         e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.myceliumDirt));
 
         e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.glassKiln));
+
+        e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.glassJar));
     }
 
     @SubscribeEvent

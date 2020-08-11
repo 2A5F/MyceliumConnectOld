@@ -2,6 +2,7 @@ package co.volight.mycelium_connect;
 
 import co.volight.mycelium_connect.blocks.MyceliumDirt;
 import co.volight.mycelium_connect.blocks.fungi.Fungi;
+import co.volight.mycelium_connect.blocks.jar.GlassJar;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKiln;
 import co.volight.mycelium_connect.utils.Itemization;
 import net.minecraft.block.Block;
@@ -32,4 +33,7 @@ public class MCCBlocks {
 
     @ObjectHolder(GlassKiln.name)
     public static final GlassKiln glassKiln = null;
+
+    @ObjectHolder(GlassJar.name)
+    public static final GlassJar glassJar = null;
 }
