@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(MCC.ID)
 public final class MCC {
     public static final String ID = "mycelium_connect";
-    public static final Logger Logger = LogManager.getLogger();
+    public static final Logger Logger = LogManager.getLogger(ID);
     public static final ItemGroup MainGroup = new MainItemGroup();
 
     public MCC() {

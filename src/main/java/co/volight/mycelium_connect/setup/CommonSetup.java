@@ -7,10 +7,7 @@ import co.volight.mycelium_connect.blocks.fungi.Fungi;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKiln;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnContainer;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnTileEntity;
-import co.volight.mycelium_connect.items.GlassDust;
-import co.volight.mycelium_connect.items.GlassNugget;
-import co.volight.mycelium_connect.items.GlassShards;
-import co.volight.mycelium_connect.items.WorkHammer;
+import co.volight.mycelium_connect.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -65,6 +62,11 @@ public class CommonSetup {
         e.getRegistry().register(new GlassShards());
         e.getRegistry().register(new GlassDust());
         e.getRegistry().register(new GlassNugget());
+
+        e.getRegistry().register(new Bark());
+
+        e.getRegistry().register(new Cork());
+        e.getRegistry().register(new FlatCork());
 
         e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.myceliumDirt));
 

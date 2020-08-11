@@ -5,7 +5,6 @@ import co.volight.mycelium_connect.api.INeedFuel;
 import co.volight.mycelium_connect.slots.FuelSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.Inventory;
@@ -15,15 +14,13 @@ import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 public class GlassKilnContainer extends RecipeBookContainer<IInventory> implements INeedFuel {
     public static final String name = GlassKiln.name;
@@ -34,41 +31,46 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
     public static final int height = GlassKilnTileEntity.invHeight;
     public static final int size = GlassKilnTileEntity.invSize;
 
+    public static final int playBagWidth = 9;
+    public static final int playBagHeight = 3;
+    public static final int playBagSize = playBagWidth * playBagHeight;
+    public static final int playInvSize = playBagSize + playBagWidth;
+
+
     private final IInventory selfInventory;
-    private final IIntArray selfData;
+    private final GlassKilnData data;
     protected final World world;
 
     public GlassKilnContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new Inventory(size), new IntArray(4));
+        this(id, playerInventory, new Inventory(size), new GlassKilnData());
     }
 
-    public GlassKilnContainer(int id, PlayerInventory playerInventory, IInventory selfInventory, IIntArray selfData) {
+    public GlassKilnContainer(int id, PlayerInventory playerInventory, IInventory selfInventory, GlassKilnData data) {
         super(type, id);
         assertInventorySize(selfInventory, size);
-        assertIntArraySize(selfData, 4);
         this.selfInventory = selfInventory;
-        this.selfData = selfData;
+        this.data = data;
         this.world = playerInventory.player.world;
 
         this.addSlot(new FurnaceResultSlot(playerInventory.player, selfInventory, GlassKilnTileEntity.slotOutput, 136, 27));
         this.addSlot(new FuelSlot<>(this, selfInventory, GlassKilnTileEntity.slotFuel, 82, 27));
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                this.addSlot(new Slot(selfInventory, x + y * width + 2, 20 + x * 18, 17 + y * 18));
+                this.addSlot(new Slot(selfInventory, x + y * width + GlassKilnTileEntity.invItemsOffset, 20 + x * 18, 17 + y * 18));
             }
         }
 
-        for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        for(int i = 0; i < playBagHeight; ++i) {
+            for(int j = 0; j < playBagWidth; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * playBagWidth + playBagWidth, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for(int k = 0; k < 9; ++k) {
+        for(int k = 0; k < playBagWidth; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
 
-        this.trackIntArray(selfData);
+        this.trackIntArray(data);
     }
 
     @Override
@@ -90,7 +92,15 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
 
     @Override
     public int getOutputSlot() {
-        return 0;
+        return GlassKilnTileEntity.slotOutput;
+    }
+
+    public int getFuelSlot() {
+        return GlassKilnTileEntity.slotFuel;
+    }
+
+    public int[] getItemsSlots() {
+        return GlassKilnTileEntity.slotItems;
     }
 
     @Override
@@ -124,24 +134,72 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
 
     @OnlyIn(Dist.CLIENT)
     public int getCookProgressionScaled() {
-        int i = this.selfData.get(2);
-        int j = this.selfData.get(3);
-        return j != 0 && i != 0 ? i * 24 / j : 0;
+        int cookTime = this.data.cookTime;
+        int total = this.data.cookTimeTotal;
+        return total != 0 && cookTime != 0 ? cookTime * 24 / total : 0;
     }
 
     @OnlyIn(Dist.CLIENT)
     public int getBurnLeftScaled() {
-        int i = this.selfData.get(1);
-        if (i == 0) {
-            i = 200;
+        int fuelTime = this.data.fuelTime;
+        if (fuelTime == 0) {
+            fuelTime = 200;
         }
-
-        return this.selfData.get(0) * 13 / i;
+        return this.data.burnTime * 13 / fuelTime;
     }
 
     @OnlyIn(Dist.CLIENT)
     public boolean isBurning() {
-        return this.selfData.get(0) > 0;
+        return this.data.get(0) > 0;
     }
 
+    @Nonnull @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack result = ItemStack.EMPTY;
+        Slot targetSlot = this.inventorySlots.get(index);
+        if (targetSlot != null && targetSlot.getHasStack()) {
+            ItemStack targetItem = targetSlot.getStack();
+            result = targetItem.copy();
+            int[] itemsSlots = getItemsSlots();
+            if (index == getOutputSlot()) {
+                if (!this.mergeItemStack(targetItem, size, size + playInvSize, true)) {
+                    return ItemStack.EMPTY;
+                }
+                targetSlot.onSlotChange(targetItem, result);
+            } else if (index != getFuelSlot() && Arrays.stream(itemsSlots).noneMatch(x -> x == index)) {
+                if (this.hasRecipe(targetItem)) {
+                    if (!this.mergeItemStack(targetItem, itemsSlots[0], itemsSlots[itemsSlots.length - 1], false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (this.isFuel(targetItem)) {
+                    if (!this.mergeItemStack(targetItem, getFuelSlot(), getFuelSlot() + 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index >= size && index < size + playBagSize) {
+                    if (!this.mergeItemStack(targetItem, size + playBagSize, size + playInvSize, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index >= size + playBagSize && index < size + playInvSize &&
+                        !this.mergeItemStack(targetItem, size, size + playBagSize, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.mergeItemStack(targetItem, size, size + playInvSize, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (targetItem.isEmpty()) {
+                targetSlot.putStack(ItemStack.EMPTY);
+            } else {
+                targetSlot.onSlotChanged();
+            }
+
+            if (targetItem.getCount() == result.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            targetSlot.onTake(playerIn, targetItem);
+        }
+
+        return result;
+    }
 }

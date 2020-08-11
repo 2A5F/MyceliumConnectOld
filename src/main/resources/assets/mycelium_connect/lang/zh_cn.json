@@ -16,9 +16,14 @@
   "item.mycelium_connect.glass_dust": "玻璃粉",
   "item.mycelium_connect.glass_nugget": "玻璃粒",
 
+  "item.mycelium_connect.bark": "树皮",
+
   "block.mycelium_connect.glass_kiln": "玻璃窑",
 
-  "container.glass_kiln": "玻璃窑",
+  "container.mycelium_connect.glass_kiln": "玻璃窑",
+
+  "item.mycelium_connect.cork": "木塞",
+  "item.mycelium_connect.flat_cork": "扁木塞",
 
   "_": ""
 }

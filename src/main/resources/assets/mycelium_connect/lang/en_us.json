@@ -16,9 +16,14 @@
   "item.mycelium_connect.glass_dust": "Glass Dust",
   "item.mycelium_connect.glass_nugget": "Glass Nugget",
 
+  "item.mycelium_connect.bark": "Bark",
+
   "block.mycelium_connect.glass_kiln": "Glass Kiln",
 
-  "container.glass_kiln": "Glass Kiln",
+  "container.mycelium_connect.glass_kiln": "Glass Kiln",
+
+  "item.mycelium_connect.cork": "Cork",
+  "item.mycelium_connect.flat_cork": "Flat Cork",
 
   "_": ""
 }
