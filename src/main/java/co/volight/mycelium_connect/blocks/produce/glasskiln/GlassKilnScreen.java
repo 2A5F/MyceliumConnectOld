@@ -1,15 +1,15 @@
 package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
+import co.volight.mycelium_connect.gui.widget.TexturedButton;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.recipebook.*;
-import net.minecraft.client.gui.screen.inventory.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,7 +19,11 @@ import javax.annotation.Nonnull;
 public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> implements IRecipeShownListener {
     public static final String name = GlassKiln.name;
 
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(MCC.ID, "textures/gui/container/" + name + ".png");
+    public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(MCC.ID, "textures/gui/container/" + name + ".png");
+    public static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
+
+    public static final TranslationTextComponent itooltip_gnite = new TranslationTextComponent("gui." + MCC.ID + "." + name + ".tooltip.ignite");
+    public static final TranslationTextComponent itooltip_pause = new TranslationTextComponent("gui." + MCC.ID + "." + name + ".tooltip.pause");
 
     public GlassKilnScreen(GlassKilnContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -33,8 +37,33 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         super.func_231160_c_();
         this.widthTooNarrowIn = this.field_230708_k_/* int width */ < 379;
 
-        // field_238742_p_ := int titleX ; field_230712_o_ := FontRenderer textRenderer ; func_238414_a_ := int getWidth(ITextProperties properties)
-        this.field_238742_p_ = (this.xSize - this.field_230712_o_.func_238414_a_( this.field_230704_d_/* ITextComponent title */)) / 2;
+        // field_238742_p_ := int titleX
+        this.field_238742_p_ = 20;
+
+        // func_230480_a_ := <T extends Widget> T addButton(T button)
+        this.func_230480_a_(new TexturedButton(
+                this.guiLeft + 79, this.guiTop + 49, 22, 21,
+                0, 213, 22, - 22, GUI_TEXTURE, () -> false, (buttonWidget) -> {
+        }) {
+            // renderToolTip
+            @Override
+            public void func_230443_a_(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
+                // func_238652_a_ := void renderToolTip(MatrixStack matrices, ITextProperties text, int x, int y)
+                GlassKilnScreen.this.func_238652_a_(matrices, itooltip_gnite, mouseX, mouseY);
+            }
+        });
+        this.func_230480_a_(new TexturedButton(
+                this.guiLeft + 105, this.guiTop + 49, 12, 21,
+                23, 213, 22, - 22, GUI_TEXTURE, () -> true, (buttonWidget) -> {
+        }) {
+            // renderToolTip
+            @Override
+            public void func_230443_a_(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
+                // func_238652_a_ := void renderToolTip(MatrixStack matrices, ITextProperties text, int x, int y)
+                GlassKilnScreen.this.func_238652_a_(matrices, itooltip_pause, mouseX, mouseY);
+            }
+        }
+        );
     }
 
     // tick
@@ -49,7 +78,11 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         // func_230446_a_ := void renderBackground(MatrixStack matrices)
         this.func_230446_a_(matrices);
 
+        // super.render()
         super.func_230430_a_(matrices, mouseX, mouseY, delta);
+
+        // func_230459_a_ := void drawMouseoverTooltip(MatrixStack matrices, int x, int y)
+        this.func_230459_a_(matrices, mouseX, mouseY);
     }
 
     // drawBackground

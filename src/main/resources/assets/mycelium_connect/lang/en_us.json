@@ -21,6 +21,8 @@
   "block.mycelium_connect.glass_kiln": "Glass Kiln",
 
   "container.mycelium_connect.glass_kiln": "Glass Kiln",
+  "gui.mycelium_connect.glass_kiln.tooltip.ignite": "Ignite!",
+  "gui.mycelium_connect.glass_kiln.tooltip.pause": "Pause!",
 
   "item.mycelium_connect.cork": "Cork",
   "item.mycelium_connect.flat_cork": "Flat Cork",

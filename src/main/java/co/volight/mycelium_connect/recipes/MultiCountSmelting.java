@@ -16,6 +16,11 @@ import javax.annotation.Nullable;
 
 public class MultiCountSmelting extends AbstractCookingRecipe {
     public static final String name = "multi_count_smelting";
+    public static final IRecipeType<MultiCountSmelting> type = new IRecipeType<MultiCountSmelting>() {
+        public String toString() {
+            return MCC.ID + ":" + name;
+        }
+    };
 
     public static final Serializer SERIALIZER = new Serializer(200 );
 

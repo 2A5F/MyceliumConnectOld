@@ -21,6 +21,8 @@
   "block.mycelium_connect.glass_kiln": "玻璃窑",
 
   "container.mycelium_connect.glass_kiln": "玻璃窑",
+  "gui.mycelium_connect.glass_kiln.tooltip.ignite": "点火！",
+  "gui.mycelium_connect.glass_kiln.tooltip.pause": "暂停！",
 
   "item.mycelium_connect.cork": "木塞",
   "item.mycelium_connect.flat_cork": "扁木塞",
