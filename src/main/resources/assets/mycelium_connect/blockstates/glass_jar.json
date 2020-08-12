@@ -1,0 +1,17 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "mycelium_connect:block/glass_jar"
+      }
+    },
+    {
+      "when": {
+        "cork": true
+      },
+      "apply": {
+        "model": "mycelium_connect:block/glass_jar_cork"
+      }
+    }
+  ]
+}
