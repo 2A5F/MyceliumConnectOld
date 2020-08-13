@@ -1,7 +1,7 @@
 package co.volight.mycelium_connect.setup;
 
 import co.volight.mycelium_connect.MCCBlocks;
-import co.volight.mycelium_connect.MCCStats;
+import co.volight.mycelium_connect.MCCPackets;
 import co.volight.mycelium_connect.blocks.MyceliumDirt;
 import co.volight.mycelium_connect.blocks.fungi.Fungi;
 import co.volight.mycelium_connect.blocks.jar.GlassJar;
@@ -13,12 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.stats.IStatFormatter;
-import net.minecraft.stats.StatType;
-import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -37,18 +32,18 @@ public class CommonSetup {
 
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent e) {
-
+        MCCPackets.Setup();
     }
 
     @SubscribeEvent
     public void onRegisterBlocks(RegistryEvent.Register<Block> e) {
-        e.getRegistry().register(new Fungi());
+        e.getRegistry().register(Fungi.setup());
 
-        e.getRegistry().register(new MyceliumDirt());
+        e.getRegistry().register(MyceliumDirt.setup());
 
-        e.getRegistry().register(new GlassKiln());
+        e.getRegistry().register(GlassKiln.setup());
 
-        e.getRegistry().register(new GlassJar());
+        e.getRegistry().register(GlassJar.setup());
     }
 
     @SubscribeEvent

@@ -22,14 +22,14 @@ public class GlassKiln extends AbstractFurnaceBlock implements Itemization {
 
     public static final IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
 
-    public GlassKiln() {
-        this(Properties.create(Material.IRON, MaterialColor.IRON).hardnessAndResistance(5.0F, 3.0F).sound(SoundType.METAL));
+    public static GlassKiln setup() {
+        GlassKiln o = new GlassKiln(Properties.create(Material.IRON, MaterialColor.IRON).hardnessAndResistance(5.0F, 3.0F).sound(SoundType.METAL));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public GlassKiln(Properties properties) {
         super(properties);
-
-        setRegistryName(MCC.ID, name);
     }
 
     @Override

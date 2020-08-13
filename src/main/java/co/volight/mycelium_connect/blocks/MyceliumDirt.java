@@ -28,14 +28,15 @@ public class MyceliumDirt extends Block implements Itemization {
 
     public static final Vector3f[] colors = Fungi.colors;
 
-    public MyceliumDirt() {
-        this(Block.Properties.create(Material.EARTH, MaterialColor.DIRT).hardnessAndResistance(0.5F).sound(SoundType.GROUND));
+    public static MyceliumDirt setup() {
+        MyceliumDirt o = new MyceliumDirt(Block.Properties.create(Material.EARTH, MaterialColor.DIRT).hardnessAndResistance(0.5F).sound(SoundType.GROUND));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public MyceliumDirt(Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(POWER, 0));
-        setRegistryName(MCC.ID, name);
     }
 
     @Override

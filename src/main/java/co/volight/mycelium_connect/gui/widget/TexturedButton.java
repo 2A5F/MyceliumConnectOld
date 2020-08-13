@@ -3,6 +3,7 @@ package co.volight.mycelium_connect.gui.widget;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -68,9 +69,25 @@ public class TexturedButton extends Button {
         func_238463_a_(matrices, this.field_230690_l_, this.field_230691_m_, (float)this.u, (float)i, this.field_230688_j_, this.field_230689_k_, this.textureWidth, this.textureHeight);
 
         // func_230449_g_ := boolean isHovered()
-        if (this.func_230449_g_()) {
+        if (this.func_230449_g_() && !this.isDisabled.isDisabled()) {
             // func_230443_a_ := void renderToolTip(MatrixStack matrices, int x, int y)
             this.func_230443_a_(matrices, mouseX, mouseY);
+        }
+    }
+
+    // onPress
+    @Override
+    public void func_230930_b_() {
+        if (!this.isDisabled.isDisabled()) {
+            super.func_230930_b_();
+        }
+    }
+
+    // playDownSound
+    @Override
+    public void func_230988_a_(SoundHandler sound) {
+        if (!this.isDisabled.isDisabled()) {
+            super.func_230988_a_(sound);
         }
     }
 

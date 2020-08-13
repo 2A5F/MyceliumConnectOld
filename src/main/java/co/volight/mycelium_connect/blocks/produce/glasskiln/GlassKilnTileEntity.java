@@ -2,6 +2,7 @@ package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.MCCBlocks;
+import co.volight.mycelium_connect.api.ICanGnite;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -140,6 +141,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         this.data.burnTime = nbt.getInt("BurnTime");
         this.data.cookTime = nbt.getInt("CookTime");
         this.data.cookTimeTotal = nbt.getInt("CookTimeTotal");
+        this.data.isCooking = nbt.getBoolean("isCooking");
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(nbt, this.items);
         this.fuel = readItem(nbt, "Fuel");
@@ -153,6 +155,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         nbt.putShort("BurnTime", (short)this.data.burnTime);
         nbt.putShort("CookTime", (short)this.data.cookTime);
         nbt.putShort("CookTimeTotal", (short)this.data.cookTimeTotal);
+        nbt.putBoolean("IsCooking", this.data.isCooking);
         ItemStackHelper.saveAllItems(nbt, this.items);
         writeItem(nbt, "Fuel", this.fuel);
         writeItem(nbt, "Output", this.output);

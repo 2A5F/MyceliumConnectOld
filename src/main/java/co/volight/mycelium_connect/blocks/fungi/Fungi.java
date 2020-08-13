@@ -66,8 +66,10 @@ public class Fungi extends Block implements Itemization {
         }
     }
 
-    public Fungi() {
-        this(Block.Properties.create(Material.MISCELLANEOUS, MaterialColor.BLUE).doesNotBlockMovement().hardnessAndResistance(0.25f));
+    public static Fungi setup() {
+        Fungi o = new Fungi(Block.Properties.create(Material.MISCELLANEOUS, MaterialColor.BLUE).doesNotBlockMovement().hardnessAndResistance(0.25f));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public Fungi(Properties properties) {
@@ -79,8 +81,6 @@ public class Fungi extends Block implements Itemization {
         );
 
         initShapes();
-
-        setRegistryName(MCC.ID, name);
     }
 
     @Override

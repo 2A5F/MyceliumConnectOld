@@ -1,6 +1,7 @@
 package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
+import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.api.INeedFuel;
 import co.volight.mycelium_connect.slots.FuelSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +15,7 @@ import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +24,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
-public class GlassKilnContainer extends RecipeBookContainer<IInventory> implements INeedFuel {
+public class GlassKilnContainer extends RecipeBookContainer<IInventory> implements INeedFuel, ICanGnite {
     public static final String name = GlassKiln.name;
     public static final ContainerType<GlassKilnContainer> type = new ContainerType<>(GlassKilnContainer::new);
     static { type.setRegistryName(MCC.ID, name); }
@@ -132,6 +134,28 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         return ForgeHooks.getBurnTime(stack) > 0;
     }
 
+    public boolean isCooking() {
+        return this.data.isCooking;
+    }
+
+    public void setCooking(boolean v) {
+        this.data.isCooking = v;
+    }
+
+    @Override
+    public boolean getGnite() {
+        return this.isCooking();
+    }
+
+    @Override
+    public void setGnite(boolean v) {
+        setCooking(v);
+        if (selfInventory instanceof TileEntity) {
+            TileEntity te = (TileEntity)selfInventory;
+            te.markDirty();
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     public int getCookProgressionScaled() {
         int cookTime = this.data.cookTime;
@@ -150,7 +174,7 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
 
     @OnlyIn(Dist.CLIENT)
     public boolean isBurning() {
-        return this.data.get(0) > 0;
+        return this.data.burnTime > 0;
     }
 
     @Nonnull @Override

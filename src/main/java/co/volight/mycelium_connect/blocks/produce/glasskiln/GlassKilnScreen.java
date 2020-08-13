@@ -1,7 +1,9 @@
 package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
+import co.volight.mycelium_connect.MCCPackets;
 import co.volight.mycelium_connect.gui.widget.TexturedButton;
+import co.volight.mycelium_connect.msg.GniteMsg;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.recipebook.*;
@@ -43,7 +45,11 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         // func_230480_a_ := <T extends Widget> T addButton(T button)
         this.func_230480_a_(new TexturedButton(
                 this.guiLeft + 79, this.guiTop + 49, 22, 21,
-                0, 213, 22, - 22, GUI_TEXTURE, () -> false, (buttonWidget) -> {
+                0, 213, 22, - 22, GUI_TEXTURE, container::isCooking, (buttonWidget) -> {
+            if(!container.isCooking()) {
+                container.setCooking(true);
+                MCCPackets.instace.sendToServer(new GniteMsg(playerInventory.player.getUniqueID(), true));
+            }
         }) {
             // renderToolTip
             @Override
@@ -52,9 +58,14 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
                 GlassKilnScreen.this.func_238652_a_(matrices, itooltip_gnite, mouseX, mouseY);
             }
         });
+        // func_230480_a_ := <T extends Widget> T addButton(T button)
         this.func_230480_a_(new TexturedButton(
                 this.guiLeft + 105, this.guiTop + 49, 12, 21,
-                23, 213, 22, - 22, GUI_TEXTURE, () -> true, (buttonWidget) -> {
+                23, 213, 22, - 22, GUI_TEXTURE, () -> !container.isCooking(), (buttonWidget) -> {
+            if(container.isCooking()) {
+                container.setCooking(false);
+                MCCPackets.instace.sendToServer(new GniteMsg(playerInventory.player.getUniqueID(), false));
+            }
         }) {
             // renderToolTip
             @Override
@@ -62,8 +73,7 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
                 // func_238652_a_ := void renderToolTip(MatrixStack matrices, ITextProperties text, int x, int y)
                 GlassKilnScreen.this.func_238652_a_(matrices, itooltip_pause, mouseX, mouseY);
             }
-        }
-        );
+        });
     }
 
     // tick
