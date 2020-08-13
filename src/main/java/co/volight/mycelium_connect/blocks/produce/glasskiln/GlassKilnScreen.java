@@ -76,6 +76,8 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         });
     }
 
+
+
     // tick
     @Override
     public void func_231023_e_() {
@@ -115,6 +117,25 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         int l = this.container.getCookProgressionScaled();
         // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
         this.func_238474_b_(matrices, i + 79, j + 34, 176, 14, l + 1, 16);
+    }
+
+    // drawForeground
+    @Override
+    protected void func_230451_b_(MatrixStack matrices, int mouseX, int mouseY) {
+        this.field_230712_o_.func_238422_b_(matrices, this.field_230704_d_, (float)this.field_238742_p_, (float)this.field_238743_q_, 4210752);
+        this.field_230712_o_.func_238422_b_(matrices, this.playerInventory.getDisplayName(), (float)this.field_238744_r_, (float)this.field_238745_s_, 4210752);
+
+        if (this.container.isCooking()) {
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.enableBlend();
+            // field_230706_i_ := Minecraft client
+            this.field_230706_i_.getTextureManager().bindTexture(GUI_TEXTURE);
+            int i = this.guiLeft;
+            int j = this.guiTop;
+            // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+            this.func_238474_b_(matrices, 18, 15, 37, 200, 56, 56);
+            RenderSystem.disableBlend();
+        }
     }
 
     @Override

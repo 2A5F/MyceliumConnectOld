@@ -4,6 +4,7 @@ import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.api.INeedFuel;
 import co.volight.mycelium_connect.slots.FuelSlot;
+import co.volight.mycelium_connect.slots.LockableSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -58,7 +59,7 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         this.addSlot(new FuelSlot<>(this, selfInventory, GlassKilnTileEntity.slotFuel, 82, 27));
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                this.addSlot(new Slot(selfInventory, x + y * width + GlassKilnTileEntity.invItemsOffset, 20 + x * 18, 17 + y * 18));
+                this.addSlot(new LockableSlot(selfInventory, x + y * width + GlassKilnTileEntity.invItemsOffset, 20 + x * 18, 17 + y * 18, this::isCooking));
             }
         }
 
@@ -226,4 +227,5 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
 
         return result;
     }
+
 }
