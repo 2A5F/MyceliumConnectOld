@@ -6,12 +6,13 @@ import net.minecraft.item.Item;
 public class GlassNugget extends Item {
     public static final String name = "glass_nugget";
 
-    public GlassNugget() {
-        this(new Properties().group(MCC.MainGroup));
+    public static GlassNugget setup() {
+        GlassNugget o = new GlassNugget(new Properties().group(MCC.MainGroup));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public GlassNugget(Properties properties) {
         super(properties);
-        setRegistryName(MCC.ID, name);
     }
 }

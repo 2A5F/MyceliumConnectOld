@@ -50,21 +50,21 @@ public class CommonSetup {
     public void onRegisterItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.fungi));
 
-        e.getRegistry().register(new WorkHammer.NormalWorkHammer());
-        e.getRegistry().register(new WorkHammer.StoneWorkHammer());
-        e.getRegistry().register(new WorkHammer.IronWorkHammer());
-        e.getRegistry().register(new WorkHammer.GoldenWorkHammer());
-        e.getRegistry().register(new WorkHammer.DiamondWorkHammer());
-        e.getRegistry().register(new WorkHammer.NetheriteWorkHammer());
+        e.getRegistry().register(WorkHammer.NormalWorkHammer.setup());
+        e.getRegistry().register(WorkHammer.StoneWorkHammer.setup());
+        e.getRegistry().register(WorkHammer.IronWorkHammer.setup());
+        e.getRegistry().register(WorkHammer.GoldenWorkHammer.setup());
+        e.getRegistry().register(WorkHammer.DiamondWorkHammer.setup());
+        e.getRegistry().register(WorkHammer.NetheriteWorkHammer.setup());
 
-        e.getRegistry().register(new GlassShards());
-        e.getRegistry().register(new GlassDust());
-        e.getRegistry().register(new GlassNugget());
+        e.getRegistry().register(GlassShards.setup());
+        e.getRegistry().register(GlassDust.setup());
+        e.getRegistry().register(GlassNugget.setup());
 
-        e.getRegistry().register(new Bark());
+        e.getRegistry().register(Bark.setup());
 
-        e.getRegistry().register(new Cork());
-        e.getRegistry().register(new FlatCork());
+        e.getRegistry().register(Cork.setup());
+        e.getRegistry().register(FlatCork.setup());
 
         e.getRegistry().register(MCCBlocks.makeBlockItem(MCCBlocks.myceliumDirt));
 

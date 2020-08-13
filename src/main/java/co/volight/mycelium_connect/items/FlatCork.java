@@ -6,12 +6,13 @@ import net.minecraft.item.Item;
 public class FlatCork extends Item {
     public static final String name = "flat_cork";
 
-    public FlatCork() {
-        this(new Properties().group(MCC.MainGroup));
+    public static FlatCork setup() {
+        FlatCork o = new FlatCork(new Properties().group(MCC.MainGroup));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public FlatCork(Properties properties) {
         super(properties);
-        setRegistryName(MCC.ID, name);
     }
 }

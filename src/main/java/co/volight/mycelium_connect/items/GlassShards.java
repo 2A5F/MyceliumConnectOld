@@ -6,12 +6,13 @@ import net.minecraft.item.Item;
 public class GlassShards extends Item {
     public static final String name = "glass_shards";
 
-    public GlassShards() {
-        this(new Properties().group(MCC.MainGroup));
+    public static GlassShards setup() {
+        GlassShards o = new GlassShards(new Properties().group(MCC.MainGroup));
+        o.setRegistryName(MCC.ID, name);
+        return o;
     }
 
     public GlassShards(Properties properties) {
         super(properties);
-        setRegistryName(MCC.ID, name);
     }
 }

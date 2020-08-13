@@ -26,78 +26,84 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
     public static class NormalWorkHammer extends WorkHammer {
         public static final String name = "work_hammer";
 
-        public NormalWorkHammer() {
-            this(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+        public static NormalWorkHammer setup() {
+            NormalWorkHammer o = new NormalWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public NormalWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
     public static class StoneWorkHammer extends WorkHammer {
         public static final String name = "stone_work_hammer";
 
-        public StoneWorkHammer() {
-            this(ItemTier.STONE, 5, -2.5f, new Item.Properties().group(MCC.MainGroup));
+        public static StoneWorkHammer setup() {
+            StoneWorkHammer o = new StoneWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public StoneWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
     public static class IronWorkHammer extends WorkHammer {
         public static final String name = "iron_work_hammer";
 
-        public IronWorkHammer() {
-            this(ItemTier.IRON, 5, -3.0f, new Item.Properties().group(MCC.MainGroup));
+        public static IronWorkHammer setup() {
+            IronWorkHammer o = new IronWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public IronWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
     public static class GoldenWorkHammer extends WorkHammer {
         public static final String name = "golden_work_hammer";
 
-        public GoldenWorkHammer() {
-            this(ItemTier.GOLD, 4, -2.0f, new Item.Properties().group(MCC.MainGroup));
+        public static GoldenWorkHammer setup() {
+            GoldenWorkHammer o = new GoldenWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public GoldenWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
     public static class DiamondWorkHammer extends WorkHammer {
         public static final String name = "diamond_work_hammer";
 
-        public DiamondWorkHammer() {
-            this(ItemTier.DIAMOND, 5, -3.0f, new Item.Properties().group(MCC.MainGroup));
+        public static DiamondWorkHammer setup() {
+            DiamondWorkHammer o = new DiamondWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public DiamondWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
     public static class NetheriteWorkHammer extends WorkHammer {
         public static final String name = "netherite_work_hammer";
 
-        public NetheriteWorkHammer() {
-            this(ItemTier.NETHERITE, 5, -2.5f, new Item.Properties().group(MCC.MainGroup));
+        public static NetheriteWorkHammer setup() {
+            NetheriteWorkHammer o = new NetheriteWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
+            o.setRegistryName(MCC.ID, name);
+            return o;
         }
 
         public NetheriteWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
             super(tier, attackDamage, attackSpeed, properties);
-            setRegistryName(MCC.ID, name);
         }
     }
 
