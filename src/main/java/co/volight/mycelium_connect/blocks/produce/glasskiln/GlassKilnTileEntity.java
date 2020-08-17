@@ -3,6 +3,8 @@ package co.volight.mycelium_connect.blocks.produce.glasskiln;
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.MCCBlocks;
 import co.volight.mycelium_connect.api.ICanGnite;
+import co.volight.mycelium_connect.inventorys.CraftInv;
+import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,7 +26,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
     public static final TileEntityType<GlassKilnTileEntity> type = TileEntityType.Builder.create(GlassKilnTileEntity::new, MCCBlocks.glassKiln).build(null);
     static { type.setRegistryName(MCC.ID, name); }
 
-    public static final IRecipeType<? extends AbstractCookingRecipe> recipeType = GlassKiln.recipeType;
+    public static final IRecipeType<GlassKilnSmeltingRecipe> recipeType = GlassKiln.recipeType;
 
     public static final int invWidth = 3;
     public static final int invHeight = 3;
@@ -53,7 +55,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
 
     private ItemStack output = ItemStack.EMPTY;
     private ItemStack fuel = ItemStack.EMPTY;
-    private NonNullList<ItemStack> items = NonNullList.withSize(invSize, ItemStack.EMPTY);
+    private CraftInv items = new CraftInv(invWidth, invHeight);
 
     @Nonnull @Override
     public ITextComponent getDefaultName() {
@@ -79,7 +81,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
     public ItemStack getStackInSlot(int index) {
         if (index == slotOutput) return output;
         if (index == slotFuel) return fuel;
-        return items.get(index - invItemsOffset);
+        return items.getStackInSlot(index - invItemsOffset);
     }
 
     @Nonnull @Override
@@ -87,7 +89,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         if (count <= 0) return ItemStack.EMPTY;
         if (index == slotOutput) return output.split(count);
         if (index == slotFuel) return fuel.split(count);
-        return ItemStackHelper.getAndSplit(items, index - invItemsOffset, count);
+        return items.decrStackSize(index - invItemsOffset, count);
     }
 
     @Nonnull @Override
@@ -103,7 +105,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
             fuel = ItemStack.EMPTY;
             return  result;
         }
-        return ItemStackHelper.getAndRemove(this.items, index - invItemsOffset);
+        return items.removeStackFromSlot(index - invItemsOffset);
     }
 
     @Override
@@ -112,7 +114,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
         if (index == slotOutput) output = stack;
         else if (index == slotFuel) fuel = stack;
-        else items.set(index - invItemsOffset, stack);
+        else items.setInventorySlotContents(index - invItemsOffset, stack);
         if (stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
@@ -142,8 +144,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         this.data.cookTime = nbt.getInt("CookTime");
         this.data.cookTimeTotal = nbt.getInt("CookTimeTotal");
         this.data.isCooking = nbt.getBoolean("isCooking");
-        this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, this.items);
+        this.items = new CraftInv(invWidth, invHeight).LoadFromNBT(nbt);
         this.fuel = readItem(nbt, "Fuel");
         this.output = readItem(nbt, "Output");
     }
@@ -156,7 +157,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         nbt.putShort("CookTime", (short)this.data.cookTime);
         nbt.putShort("CookTimeTotal", (short)this.data.cookTimeTotal);
         nbt.putBoolean("IsCooking", this.data.isCooking);
-        ItemStackHelper.saveAllItems(nbt, this.items);
+        this.items.SaveToNBT(nbt);
         writeItem(nbt, "Fuel", this.fuel);
         writeItem(nbt, "Output", this.output);
         return nbt;

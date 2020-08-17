@@ -9,6 +9,7 @@ import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKiln;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnContainer;
 import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnTileEntity;
 import co.volight.mycelium_connect.items.*;
+import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -85,7 +86,7 @@ public class CommonSetup {
 
     @SubscribeEvent
     public void onRegisterRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> e) {
-        //e.getRegistry().register(MultiCountSmelting.SERIALIZER);
+        e.getRegistry().register(GlassKilnSmeltingRecipe.SERIALIZER);
     }
 
 }

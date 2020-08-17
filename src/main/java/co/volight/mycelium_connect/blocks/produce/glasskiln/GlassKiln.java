@@ -1,8 +1,11 @@
 package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
+import co.volight.mycelium_connect.MCCRecipeType;
 import co.volight.mycelium_connect.MCCStats;
+import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import co.volight.mycelium_connect.utils.Itemization;
+import co.volight.mycelium_connect.utils.RegistrySetup;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -17,15 +20,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
-public class GlassKiln extends AbstractFurnaceBlock implements Itemization {
+public class GlassKiln extends AbstractFurnaceBlock implements Itemization, RegistrySetup {
     public static final String name = "glass_kiln";
 
-    public static final IRecipeType<? extends AbstractCookingRecipe> recipeType = IRecipeType.SMELTING;
+    public static final IRecipeType<GlassKilnSmeltingRecipe> recipeType = MCCRecipeType.glassKilnSmelting;
 
     public static GlassKiln setup() {
-        GlassKiln o = new GlassKiln(Properties.create(Material.IRON, MaterialColor.IRON).hardnessAndResistance(5.0F, 3.0F).sound(SoundType.METAL));
-        o.setRegistryName(MCC.ID, name);
-        return o;
+        return new GlassKiln(
+                Properties.create(Material.IRON, MaterialColor.IRON).hardnessAndResistance(5.0F, 3.0F).sound(SoundType.METAL)
+        ).regName(name);
     }
 
     public GlassKiln(Properties properties) {

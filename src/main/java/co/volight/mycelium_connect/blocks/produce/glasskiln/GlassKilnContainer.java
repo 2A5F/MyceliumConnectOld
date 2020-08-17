@@ -3,6 +3,7 @@ package co.volight.mycelium_connect.blocks.produce.glasskiln;
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.api.INeedFuel;
+import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import co.volight.mycelium_connect.slots.FuelSlot;
 import co.volight.mycelium_connect.slots.LockableSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +30,7 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
     public static final String name = GlassKiln.name;
     public static final ContainerType<GlassKilnContainer> type = new ContainerType<>(GlassKilnContainer::new);
     static { type.setRegistryName(MCC.ID, name); }
-    public static final IRecipeType<? extends AbstractCookingRecipe> recipeType = GlassKilnTileEntity.recipeType;
+    public static final IRecipeType<GlassKilnSmeltingRecipe> recipeType = GlassKilnTileEntity.recipeType;
     public static final int width = GlassKilnTileEntity.invWidth;
     public static final int height = GlassKilnTileEntity.invHeight;
     public static final int size = GlassKilnTileEntity.invSize;
@@ -38,7 +39,6 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
     public static final int playBagHeight = 3;
     public static final int playBagSize = playBagWidth * playBagHeight;
     public static final int playInvSize = playBagSize + playBagWidth;
-
 
     private final IInventory selfInventory;
     private final GlassKilnData data;
