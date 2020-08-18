@@ -22,7 +22,6 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
     public static final String name = GlassKiln.name;
 
     public static final ResourceLocation GUI_TEXTURE = new ResourceLocation(MCC.ID, "textures/gui/container/" + name + ".png");
-    public static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
 
     public static final TranslationTextComponent itooltip_gnite = new TranslationTextComponent("gui." + MCC.ID + "." + name + ".tooltip.ignite");
     public static final TranslationTextComponent itooltip_pause = new TranslationTextComponent("gui." + MCC.ID + "." + name + ".tooltip.pause");
@@ -39,7 +38,7 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         this.widthTooNarrowIn = this.width < 379;
         
         this.titleX = 20;
-        
+
         this.addButton(new TexturedButton(
                 this.guiLeft + 79, this.guiTop + 49, 22, 21,
                 0, 213, 22, - 22, GUI_TEXTURE, container::isCooking, (buttonWidget) -> {
@@ -87,20 +86,8 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
     protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-        int i = this.guiLeft;
-        int j = this.guiTop;
-        // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-        this.blit(matrices, i, j, 0, 0, this.xSize, this.ySize);
-
-        if (this.container.isBurning()) {
-            int k = this.container.getBurnLeftScaled();
-            // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-            this.blit(matrices, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
-        }
-
-        int l = this.container.getCookProgressionScaled();
-        // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-        this.blit(matrices, i + 79, j + 34, 176, 14, l + 1, 16);
+        int l = this.guiLeft, t = this.guiTop;
+        drawTexture(matrices, l, t, 0, 0, this.xSize, this.ySize);
     }
 
     @Override
@@ -108,16 +95,31 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
         this.font.func_243248_b(matrices, this.title, (float)this.titleX, (float)this.titleY, 4210752);
         this.font.func_243248_b(matrices, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 4210752);
 
+        RenderSystem.enableBlend();
+        this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
+
         if (this.container.isCooking()) {
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.enableBlend();
-            this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
             int i = this.guiLeft;
             int j = this.guiTop;
-            // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-            this.blit(matrices, 18, 15, 37, 200, 56, 56);
-            RenderSystem.disableBlend();
+            drawTexture(matrices, 18, 15, 37, 200, 56, 56);
         }
+
+        int l = this.guiLeft, t = this.guiTop;
+
+        if (this.container.isBurning()) {
+            int k = this.container.getBurnLeftScaled();
+            drawTexture(matrices, 83, 53 + 12 - k, 4, 177 + 12 - k, 14, k + 1);
+        }
+
+        int cp = this.container.getCookProgressionScaled();
+        drawTexture(matrices, 103, 27, 37, 175, cp, 16);
+
+    }
+
+    public void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+        super.blit(matrices, x, y, u, v, width, height);
     }
 
     @Override

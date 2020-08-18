@@ -40,8 +40,8 @@ public class GlassKilnData implements IIntArray {
             case 0: burnTime = value; break;
             case 1: fuelTime = value; break;
             case 2: cookTime = value; break;
-            case 3: cookTimeTotal = value;
-            case 4: isCooking = value > 0;
+            case 3: cookTimeTotal = value; break;
+            case 4: isCooking = value > 0; break;
         }
     }
 

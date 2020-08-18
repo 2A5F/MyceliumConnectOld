@@ -1,8 +1,10 @@
 package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
+import co.volight.math.VLMath;
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.api.INeedFuel;
+import co.volight.mycelium_connect.inventorys.CraftInv;
 import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import co.volight.mycelium_connect.slots.FuelSlot;
 import co.volight.mycelium_connect.slots.LockableSlot;
@@ -129,10 +131,6 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         return this.selfInventory.isUsableByPlayer(playerIn);
     }
 
-    public boolean hasRecipe(ItemStack stack) {
-        return world.getRecipeManager().getRecipe((IRecipeType)recipeType, new Inventory(stack), world).isPresent();
-    }
-
     @Override
     public boolean isFuel(ItemStack stack) {
         return ForgeHooks.getBurnTime(stack) > 0;
@@ -164,16 +162,14 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
     public int getCookProgressionScaled() {
         int cookTime = this.data.cookTime;
         int total = this.data.cookTimeTotal;
-        return total != 0 && cookTime != 0 ? cookTime * 24 / total : 0;
+        return total != 0 && cookTime != 0 ? cookTime * 23 / total : 0;
     }
 
     @OnlyIn(Dist.CLIENT)
     public int getBurnLeftScaled() {
         int fuelTime = this.data.fuelTime;
-        if (fuelTime == 0) {
-            fuelTime = 200;
-        }
-        return this.data.burnTime * 13 / fuelTime;
+        if (fuelTime == 0) fuelTime = 200;
+        return VLMath.Limit(this.data.burnTime * 13 / fuelTime, 0, 13);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -195,11 +191,7 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
                 }
                 targetSlot.onSlotChange(targetItem, result);
             } else if (index != getFuelSlot() && Arrays.stream(itemsSlots).noneMatch(x -> x == index)) {
-                if (this.hasRecipe(targetItem)) {
-                    if (!this.mergeItemStack(targetItem, itemsSlots[0], itemsSlots[itemsSlots.length - 1], false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (this.isFuel(targetItem)) {
+                if (this.isFuel(targetItem)) {
                     if (!this.mergeItemStack(targetItem, getFuelSlot(), getFuelSlot() + 1, false)) {
                         return ItemStack.EMPTY;
                     }

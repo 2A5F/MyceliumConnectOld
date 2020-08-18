@@ -38,6 +38,12 @@ public class CraftInv implements IInventory, IRecipeHelperPopulator {
         return this;
     }
 
+    public void shrink(int count) {
+        for (ItemStack item : stackList) {
+            item.shrink(count);
+        }
+    }
+
     /**
      * Returns the number of slots in the inventory.
      */
@@ -131,7 +137,7 @@ public class CraftInv implements IInventory, IRecipeHelperPopulator {
 
     }
 
-    interface OnCraftMatrixChanged {
+    public interface OnCraftMatrixChanged {
         void onCraftMatrixChanged(CraftInv inv);
     }
 }

@@ -2,8 +2,10 @@ package co.volight.mycelium_connect.blocks.produce.glasskiln;
 
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.MCCBlocks;
+import co.volight.mycelium_connect.MCCPackets;
 import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.inventorys.CraftInv;
+import co.volight.mycelium_connect.msg.GniteMsg;
 import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,16 +14,23 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import javax.annotation.Nonnull;
+import net.minecraftforge.common.ForgeHooks;
 
-public class GlassKilnTileEntity extends LockableTileEntity {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public class GlassKilnTileEntity extends LockableTileEntity implements ITickableTileEntity, CraftInv.OnCraftMatrixChanged {
     public static final String name = GlassKiln.name;
     public static final TileEntityType<GlassKilnTileEntity> type = TileEntityType.Builder.create(GlassKilnTileEntity::new, MCCBlocks.glassKiln).build(null);
     static { type.setRegistryName(MCC.ID, name); }
@@ -55,7 +64,7 @@ public class GlassKilnTileEntity extends LockableTileEntity {
 
     private ItemStack output = ItemStack.EMPTY;
     private ItemStack fuel = ItemStack.EMPTY;
-    private CraftInv items = new CraftInv(invWidth, invHeight);
+    private CraftInv items = new CraftInv(invWidth, invHeight, this);
 
     @Nonnull @Override
     public ITextComponent getDefaultName() {
@@ -140,10 +149,11 @@ public class GlassKilnTileEntity extends LockableTileEntity {
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
         this.data.burnTime = nbt.getInt("BurnTime");
+        this.data.fuelTime = nbt.getInt("FuelTime");
         this.data.cookTime = nbt.getInt("CookTime");
         this.data.cookTimeTotal = nbt.getInt("CookTimeTotal");
         this.data.isCooking = nbt.getBoolean("isCooking");
-        this.items = new CraftInv(invWidth, invHeight).LoadFromNBT(nbt);
+        this.items = new CraftInv(invWidth, invHeight, this).LoadFromNBT(nbt);
         this.fuel = readItem(nbt, "Fuel");
         this.output = readItem(nbt, "Output");
     }
@@ -152,9 +162,10 @@ public class GlassKilnTileEntity extends LockableTileEntity {
     @Nonnull @Override
     public CompoundNBT write(CompoundNBT nbt) {
         super.write(nbt);
-        nbt.putShort("BurnTime", (short)this.data.burnTime);
-        nbt.putShort("CookTime", (short)this.data.cookTime);
-        nbt.putShort("CookTimeTotal", (short)this.data.cookTimeTotal);
+        nbt.putInt("BurnTime", this.data.burnTime);
+        nbt.putInt("FuelTime", this.data.fuelTime);
+        nbt.putInt("CookTime", this.data.cookTime);
+        nbt.putInt("CookTimeTotal", this.data.cookTimeTotal);
         nbt.putBoolean("IsCooking", this.data.isCooking);
         this.items.SaveToNBT(nbt);
         writeItem(nbt, "Fuel", this.fuel);
@@ -173,5 +184,120 @@ public class GlassKilnTileEntity extends LockableTileEntity {
             item.write(itemNbt);
             nbt.put(name, itemNbt);
         }
+    }
+
+    public static int getBurnTime(ItemStack fuel) {
+        if (fuel.isEmpty()) return 0;
+        return ForgeHooks.getBurnTime(fuel);
+    }
+
+    protected int getCookTime() {
+        return this.world.getRecipeManager().getRecipe(recipeType, this.items, this.world).map(GlassKilnSmeltingRecipe::getCookTime).orElse(GlassKilnSmeltingRecipe.SERIALIZER.getDefaultCookingTime());
+    }
+
+    public boolean isBurning() {
+        return this.data.burnTime > 0;
+    }
+
+    @Override
+    public void tick() {
+        boolean lastBurning = isBurning();
+        boolean needUpdate = false;
+
+        if (isBurning()) --this.data.burnTime;
+
+        if (!this.world.isRemote) {
+            IRecipe<CraftInv> recipe = this.world.getRecipeManager().getRecipe(recipeType, items, this.world).orElse(null);
+
+            if (this.data.isCooking) {
+                boolean canmade = canMade(recipe);
+
+                if (canmade) {
+                    this.data.cookTimeTotal = getCookTime();
+                }
+
+                if (canmade && !isBurning()) {
+                    int fuelTime = getBurnTime(fuel);
+                    this.data.burnTime = fuelTime;
+                    this.data.fuelTime = fuelTime;
+
+                    if (isBurning()) {
+                        needUpdate = true;
+
+                        if (fuel.hasContainerItem()) fuel = fuel.getContainerItem();
+                        else if (!fuel.isEmpty()) {
+                            fuel.shrink(1);
+                            if (fuel.isEmpty()) fuel = fuel.getContainerItem();
+                        }
+                    }
+                }
+
+                if (canmade && isBurning()) {
+                    ++this.data.cookTime;
+
+                    if (this.data.cookTime >= this.data.cookTimeTotal) {
+                        this.data.cookTime = 0;
+
+                        made(recipe);
+                        needUpdate = true;
+                    }
+                }
+
+                if(!canmade) {
+                    this.data.isCooking = false;
+                    this.data.cookTime = 0;
+                    needUpdate = true;
+                }
+            }
+
+        }
+
+        if (lastBurning != isBurning()) {
+            needUpdate = true;
+            this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(GlassKiln.LIT, isBurning()), 3);
+        }
+
+        if (needUpdate) markDirty();
+    }
+
+    @Override
+    public void onCraftMatrixChanged(CraftInv inv) {
+        this.data.isCooking = false;
+        this.data.cookTime = 0;
+        markDirty();
+    }
+
+    public boolean canMade(IRecipe<CraftInv> recipe) {
+        if (items.isEmpty() || recipe == null) return false;
+        ItemStack result = recipe.getRecipeOutput();
+        if (result.isEmpty()) return false;
+        if (output.isEmpty()) return true;
+        if (!output.isItemEqual(result)) return false;
+        int count = output.getCount() + result.getCount();
+        if (count <= getInventoryStackLimit() && count <= output.getMaxStackSize()) return true;
+        return count <= result.getMaxStackSize();
+    }
+
+    public void made(IRecipe<CraftInv> recipe) {
+        if (recipe == null || !canMade(recipe)) return;
+        ItemStack result = recipe.getRecipeOutput();
+        if (output.isEmpty()) {
+            output = result.copy();
+        } else if (output.isItemEqual(result)) {
+            output.grow(result.getCount());
+        }
+
+        // if (!this.world.isRemote) {
+        //     this.setRecipeUsed(recipe);
+        // }
+
+        items.shrink(1);
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+
+
     }
 }

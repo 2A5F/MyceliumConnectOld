@@ -1,10 +1,18 @@
 {
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "mycelium_connect:glass_dust",
-    "count": 3
+  "type": "mycelium_connect:glass_kiln_smelting",
+  "group": "mycelium_connect:glass_nugget",
+  "pattern": [
+    " X ",
+    "X X",
+    "   "
+  ],
+  "key": {
+    "X": {
+      "item": "mycelium_connect:glass_dust"
+    }
   },
-  "result": "mycelium_connect:glass_nugget",
-  "experience": 0,
+  "result": {
+    "item": "mycelium_connect:glass_nugget"
+  },
   "cookingtime": 100
 }
