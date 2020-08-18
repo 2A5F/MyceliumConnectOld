@@ -2,6 +2,7 @@ package co.volight.mycelium_connect.items;
 
 import co.volight.mycelium_connect.MCC;
 import co.volight.mycelium_connect.tier.ObsidianTier;
+import co.volight.mycelium_connect.utils.RegistrySetup;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -22,14 +23,14 @@ import net.minecraftforge.common.extensions.IForgeItem;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
+public class WorkHammer extends TieredItem implements IVanishable, IForgeItem, RegistrySetup {
     public static class NormalWorkHammer extends WorkHammer {
         public static final String name = "work_hammer";
 
         public static NormalWorkHammer setup() {
-            NormalWorkHammer o = new NormalWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new NormalWorkHammer(
+                    ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public NormalWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -41,9 +42,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         public static final String name = "stone_work_hammer";
 
         public static StoneWorkHammer setup() {
-            StoneWorkHammer o = new StoneWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new StoneWorkHammer(
+                    ItemTier.STONE, 5, -2.5f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public StoneWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -55,9 +56,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         public static final String name = "iron_work_hammer";
 
         public static IronWorkHammer setup() {
-            IronWorkHammer o = new IronWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new IronWorkHammer(
+                    ItemTier.IRON, 5, -3.0f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public IronWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -69,9 +70,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         public static final String name = "golden_work_hammer";
 
         public static GoldenWorkHammer setup() {
-            GoldenWorkHammer o = new GoldenWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new GoldenWorkHammer(
+                    ItemTier.GOLD, 5, -2.0f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public GoldenWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -83,9 +84,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         public static final String name = "diamond_work_hammer";
 
         public static DiamondWorkHammer setup() {
-            DiamondWorkHammer o = new DiamondWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new DiamondWorkHammer(
+                    ItemTier.DIAMOND, 5, -3.0f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public DiamondWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -97,9 +98,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         public static final String name = "netherite_work_hammer";
 
         public static NetheriteWorkHammer setup() {
-            NetheriteWorkHammer o = new NetheriteWorkHammer(ObsidianTier.tier, 5, -3.5f, new Item.Properties().group(MCC.MainGroup));
-            o.setRegistryName(MCC.ID, name);
-            return o;
+            return new NetheriteWorkHammer(
+                    ItemTier.NETHERITE, 5, -2.5f, new Item.Properties().group(MCC.MainGroup)
+            ).regName(name);
         }
 
         public NetheriteWorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
@@ -115,9 +116,9 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
         super(tier, properties);
         this.attackDamage = (float)attackDamage + tier.getAttackDamage();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.field_233823_f_, // generic.attack_damage
+        builder.put(Attributes.ATTACK_DAMAGE, // generic.attack_damage
                 new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.field_233825_h_, // generic.attack_speed
+        builder.put(Attributes.ATTACK_SPEED, // generic.attack_speed
                 new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)attackSpeed, AttributeModifier.Operation.ADDITION));
         this.attributeModifier = builder.build();
     }
@@ -147,7 +148,7 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem {
 
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         Material material = state.getMaterial();
-        return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.func_235714_a_(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 2.5F;
+        return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.isIn(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 2.5F;
     }
 
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {

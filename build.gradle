@@ -14,7 +14,6 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 def name = "MyceliumConnect"
-def mc_version = "${mc_l_version}.${mc_f_version}"
 def build_version = ""
 def env = System.getenv()
 if (env.BUILD_NUMBER) {
@@ -35,7 +34,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: "${mappings_channel}", version: "${mappings_version}-${mc_l_version}"
+    mappings channel: "${mappings_channel}", version: "${mappings_version}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')

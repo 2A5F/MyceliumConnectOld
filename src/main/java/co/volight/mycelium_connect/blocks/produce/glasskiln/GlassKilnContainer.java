@@ -13,10 +13,7 @@ import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.item.crafting.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -119,6 +116,12 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
     @OnlyIn(Dist.CLIENT) @Override
     public int getSize() {
         return size;
+    }
+
+    // getRecipeBookCategory
+    @Nonnull @Override
+    public RecipeBookCategory func_241850_m() {
+        return null;
     }
 
     @Override

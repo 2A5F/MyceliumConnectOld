@@ -19,9 +19,8 @@ public enum FungiSide implements IStringSerializable {
         return name;
     }
 
-    @Nonnull
-    @Override
-    public String func_176610_l() {
+    @Nonnull @Override
+    public String getString() {
         return name;
     }
 

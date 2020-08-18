@@ -136,10 +136,9 @@ public class GlassKilnTileEntity extends LockableTileEntity {
         this.items.clear();
     }
 
-    // read nbt
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt) {
-        super.func_230337_a_(state, nbt);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         this.data.burnTime = nbt.getInt("BurnTime");
         this.data.cookTime = nbt.getInt("CookTime");
         this.data.cookTimeTotal = nbt.getInt("CookTimeTotal");

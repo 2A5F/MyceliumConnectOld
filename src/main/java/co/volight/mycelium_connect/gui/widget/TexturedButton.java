@@ -30,7 +30,7 @@ public class TexturedButton extends Button {
     }
 
     public TexturedButton(int x, int y, int width, int height, int u, int v, int hoveredVOffset, int disabledVOffset, ResourceLocation texture, int textureWidth, int textureHeight, IsDisabled isDisabled, IPressable pressAction) {
-        this(x, y, width, height, u, v, hoveredVOffset, disabledVOffset, texture, textureWidth, textureHeight, isDisabled, pressAction, StringTextComponent.field_240750_d_/* EMPTY */);
+        this(x, y, width, height, u, v, hoveredVOffset, disabledVOffset, texture, textureWidth, textureHeight, isDisabled, pressAction, StringTextComponent.EMPTY);
     }
 
     public TexturedButton(int x, int y, int width, int height, int u, int v, int hoveredVOffset, int disabledVOffset, ResourceLocation texture, int textureWidth, int textureHeight, IsDisabled isDisabled, IPressable pressAction, ITextComponent text) {
@@ -46,48 +46,42 @@ public class TexturedButton extends Button {
     }
 
     public void setPos(int x, int y) {
-        this.field_230690_l_ /* x */ = x;
-        this.field_230691_m_ /* y */ = y;
+        this.x = x;
+        this.y = y;
     }
 
-    // renderButton
-    public void func_230431_b_(@Nonnull MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    @Override
+    public void renderButton(@Nonnull MatrixStack matrices, int mouseX, int mouseY, float delta) {
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(this.texture);
         int i = this.v;
         if (this.isDisabled.isDisabled()) {
             i += this.disabledVOffset;
         }
-        // func_230449_g_ := boolean isHovered()
-        else if (this.func_230449_g_()) {
+        else if (this.isHovered()) {
             i += this.hoveredVOffset;
         }
 
         RenderSystem.enableDepthTest();
-        // func_238463_a_ := static void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight)
-        // field_230690_l_ := x ; field_230691_m_ := y ; field_230688_j_ := width ; field_230689_k_ := height
-        func_238463_a_(matrices, this.field_230690_l_, this.field_230691_m_, (float)this.u, (float)i, this.field_230688_j_, this.field_230689_k_, this.textureWidth, this.textureHeight);
-
-        // func_230449_g_ := boolean isHovered()
-        if (this.func_230449_g_() && !this.isDisabled.isDisabled()) {
-            // func_230443_a_ := void renderToolTip(MatrixStack matrices, int x, int y)
-            this.func_230443_a_(matrices, mouseX, mouseY);
+        // blit := static void drawTexture(MatrixStack matrices, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight)
+        blit(matrices, this.x, this.y, (float)this.u, (float)i, this.width, this.height, this.textureWidth, this.textureHeight);
+        
+        if (this.isHovered() && !this.isDisabled.isDisabled()) {
+            this.renderToolTip(matrices, mouseX, mouseY);
         }
     }
 
-    // onPress
     @Override
-    public void func_230930_b_() {
+    public void onPress() {
         if (!this.isDisabled.isDisabled()) {
-            super.func_230930_b_();
+            super.onPress();
         }
     }
 
-    // playDownSound
     @Override
-    public void func_230988_a_(SoundHandler sound) {
+    public void playDownSound(SoundHandler sound) {
         if (!this.isDisabled.isDisabled()) {
-            super.func_230988_a_(sound);
+            super.playDownSound(sound);
         }
     }
 

@@ -205,7 +205,8 @@ public class GlassKilnSmeltingRecipe implements IRecipe<CraftInv>, IShapedRecipe
 
         private ItemStack deserializeItem(JsonObject json) {
             String s = JSONUtils.getString(json, "item");
-            Item item = Registry.ITEM.getValue(new ResourceLocation(s)).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + s + "'"));
+            // func_241873_b := getValue(ResourceLocation name)
+            Item item = Registry.ITEM.func_241873_b(new ResourceLocation(s)).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + s + "'"));
             if (json.has("data")) {
                 throw new JsonParseException("Disallowed data tag found");
             } else {

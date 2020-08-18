@@ -38,6 +38,6 @@ public class ObsidianTier implements IItemTier {
     @Nonnull
     @Override
     public Ingredient getRepairMaterial() {
-        return Ingredient.fromItems(Items.OBSIDIAN, Items.field_234797_rz_/* crying_obsidian */);
+        return Ingredient.fromItems(Items.OBSIDIAN, Items.CRYING_OBSIDIAN);
     }
 }

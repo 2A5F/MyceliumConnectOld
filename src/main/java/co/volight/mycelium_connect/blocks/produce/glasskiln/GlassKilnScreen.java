@@ -32,18 +32,15 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
     }
 
     private boolean widthTooNarrowIn;
-
-    // init
+    
     @Override
-    protected void func_231160_c_() {
-        super.func_231160_c_();
-        this.widthTooNarrowIn = this.field_230708_k_/* int width */ < 379;
-
-        // field_238742_p_ := int titleX
-        this.field_238742_p_ = 20;
-
-        // func_230480_a_ := <T extends Widget> T addButton(T button)
-        this.func_230480_a_(new TexturedButton(
+    protected void init() {
+        super.init();
+        this.widthTooNarrowIn = this.width < 379;
+        
+        this.titleX = 20;
+        
+        this.addButton(new TexturedButton(
                 this.guiLeft + 79, this.guiTop + 49, 22, 21,
                 0, 213, 22, - 22, GUI_TEXTURE, container::isCooking, (buttonWidget) -> {
             if(!container.isCooking()) {
@@ -51,15 +48,12 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
                 MCCPackets.instace.sendToServer(new GniteMsg(playerInventory.player.getUniqueID(), true));
             }
         }) {
-            // renderToolTip
             @Override
-            public void func_230443_a_(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
-                // func_238652_a_ := void renderToolTip(MatrixStack matrices, ITextProperties text, int x, int y)
-                GlassKilnScreen.this.func_238652_a_(matrices, itooltip_gnite, mouseX, mouseY);
+            public void renderToolTip(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
+                GlassKilnScreen.this.renderTooltip(matrices, itooltip_gnite, mouseX, mouseY);
             }
         });
-        // func_230480_a_ := <T extends Widget> T addButton(T button)
-        this.func_230480_a_(new TexturedButton(
+        this.addButton(new TexturedButton(
                 this.guiLeft + 105, this.guiTop + 49, 12, 21,
                 23, 213, 22, - 22, GUI_TEXTURE, () -> !container.isCooking(), (buttonWidget) -> {
             if(container.isCooking()) {
@@ -67,73 +61,61 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
                 MCCPackets.instace.sendToServer(new GniteMsg(playerInventory.player.getUniqueID(), false));
             }
         }) {
-            // renderToolTip
             @Override
-            public void func_230443_a_(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
-                // func_238652_a_ := void renderToolTip(MatrixStack matrices, ITextProperties text, int x, int y)
-                GlassKilnScreen.this.func_238652_a_(matrices, itooltip_pause, mouseX, mouseY);
+            public void renderToolTip(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
+                GlassKilnScreen.this.renderTooltip(matrices, itooltip_pause, mouseX, mouseY);
             }
         });
     }
 
-
-
-    // tick
     @Override
-    public void func_231023_e_() {
-        super.func_231023_e_();
+    public void tick() {
+        super.tick();
     }
 
-    // render
     @Override
-    public void func_230430_a_(@Nonnull MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        // func_230446_a_ := void renderBackground(MatrixStack matrices)
-        this.func_230446_a_(matrices);
+    public void render(@Nonnull MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
 
-        // super.render()
-        super.func_230430_a_(matrices, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
 
         // func_230459_a_ := void drawMouseoverTooltip(MatrixStack matrices, int x, int y)
         this.func_230459_a_(matrices, mouseX, mouseY);
     }
 
-    // drawBackground
     @Override
-    protected void func_230450_a_(@Nonnull MatrixStack matrices, float delta, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        // field_230706_i_ := Minecraft client
-        this.field_230706_i_.getTextureManager().bindTexture(GUI_TEXTURE);
+        this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
         int i = this.guiLeft;
         int j = this.guiTop;
-        // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-        this.func_238474_b_(matrices, i, j, 0, 0, this.xSize, this.ySize);
+        // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+        this.blit(matrices, i, j, 0, 0, this.xSize, this.ySize);
 
         if (this.container.isBurning()) {
             int k = this.container.getBurnLeftScaled();
-            // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-            this.func_238474_b_(matrices, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
+            // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+            this.blit(matrices, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
 
         int l = this.container.getCookProgressionScaled();
-        // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-        this.func_238474_b_(matrices, i + 79, j + 34, 176, 14, l + 1, 16);
+        // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+        this.blit(matrices, i + 79, j + 34, 176, 14, l + 1, 16);
     }
 
-    // drawForeground
     @Override
-    protected void func_230451_b_(MatrixStack matrices, int mouseX, int mouseY) {
-        this.field_230712_o_.func_238422_b_(matrices, this.field_230704_d_, (float)this.field_238742_p_, (float)this.field_238743_q_, 4210752);
-        this.field_230712_o_.func_238422_b_(matrices, this.playerInventory.getDisplayName(), (float)this.field_238744_r_, (float)this.field_238745_s_, 4210752);
+    protected void drawGuiContainerForegroundLayer(@Nonnull MatrixStack matrices, int mouseX, int mouseY) {
+        this.font.func_243248_b(matrices, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+        this.font.func_243248_b(matrices, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 4210752);
 
         if (this.container.isCooking()) {
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.enableBlend();
-            // field_230706_i_ := Minecraft client
-            this.field_230706_i_.getTextureManager().bindTexture(GUI_TEXTURE);
+            this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
             int i = this.guiLeft;
             int j = this.guiTop;
-            // func_238474_b_ := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
-            this.func_238474_b_(matrices, 18, 15, 37, 200, 56, 56);
+            // blit := void drawTexture(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+            this.blit(matrices, 18, 15, 37, 200, 56, 56);
             RenderSystem.disableBlend();
         }
     }
