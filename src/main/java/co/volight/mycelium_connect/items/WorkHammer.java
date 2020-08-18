@@ -8,7 +8,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.IVanishable;
+import net.minecraft.enchantment.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -170,5 +170,18 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem, R
     @Nonnull
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
         return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(equipmentSlot);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        if (super.canApplyAtEnchantingTable(stack, enchantment)) return true;
+        if (enchantment instanceof DamageEnchantment) return true;
+        if (enchantment instanceof LootBonusEnchantment) return true;
+        if (enchantment instanceof FireAspectEnchantment) return true;
+        if (enchantment instanceof KnockbackEnchantment) return true;
+        if (enchantment instanceof SweepingEnchantment) return true;
+        if (enchantment instanceof MendingEnchantment) return true;
+        if (enchantment instanceof UnbreakingEnchantment) return true;
+        return false;
     }
 }

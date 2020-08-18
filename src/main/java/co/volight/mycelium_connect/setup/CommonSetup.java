@@ -11,6 +11,7 @@ import co.volight.mycelium_connect.blocks.produce.glasskiln.GlassKilnTileEntity;
 import co.volight.mycelium_connect.items.*;
 import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -29,6 +30,7 @@ public class CommonSetup {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::onRegisterTileEntices);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::onRegisterContainerTypes);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::onRegisterRecipeSerializers);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Enchantment.class, this::onRegisterEnchantment);
     }
 
     @SubscribeEvent
@@ -89,4 +91,7 @@ public class CommonSetup {
         e.getRegistry().register(GlassKilnSmeltingRecipe.SERIALIZER);
     }
 
+    @SubscribeEvent
+    public void onRegisterEnchantment(RegistryEvent.Register<Enchantment> e) {
+    }
 }
