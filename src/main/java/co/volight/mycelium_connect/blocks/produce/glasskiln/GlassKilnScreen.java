@@ -41,8 +41,8 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
 
         this.addButton(new TexturedButton(
                 this.guiLeft + 79, this.guiTop + 49, 22, 21,
-                0, 213, 22, - 22, GUI_TEXTURE, container::isCooking, (buttonWidget) -> {
-            if(!container.isCooking()) {
+                0, 213, 22, - 22, GUI_TEXTURE, () -> container.isCooking() || !container.canMade, (buttonWidget) -> {
+            if(!container.isCooking() && container.canMade) {
                 container.setCooking(true);
                 MCCPackets.instace.sendToServer(new GniteMsg(playerInventory.player.getUniqueID(), true));
             }
@@ -69,6 +69,7 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
 
     @Override
     public void tick() {
+        this.container.tick();
         super.tick();
     }
 

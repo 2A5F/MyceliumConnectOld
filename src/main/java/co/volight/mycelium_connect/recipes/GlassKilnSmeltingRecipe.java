@@ -18,9 +18,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
 
@@ -107,7 +110,8 @@ public class GlassKilnSmeltingRecipe implements IRecipe<CraftInv>, IShapedRecipe
                     }
                 }
 
-                if (!ingredient.test(inv.getStackInSlot(i + j * inv.getWidth()))) {
+                boolean test = testIngredient(ingredient, inv.getStackInSlot(i + j * inv.getWidth()));
+                if (!test) {
                     return false;
                 }
             }
@@ -116,9 +120,71 @@ public class GlassKilnSmeltingRecipe implements IRecipe<CraftInv>, IShapedRecipe
         return true;
     }
 
+    protected boolean testIngredient(Ingredient ing, ItemStack item) {
+        if (ing instanceof NBTIngredient) {
+            NBTIngredient nbting = (NBTIngredient)ing;
+            Field field = ObfuscationReflectionHelper.findField(NBTIngredient.class, "stack");
+            if(!nbting.test(item)) return false;
+            try {
+                ItemStack stack = (ItemStack)field.get(nbting);
+                if (stack.getCount() <= item.getCount()) return true;
+            } catch (IllegalAccessException e) {
+                MCC.Logger.error(e);
+            }
+            return false;
+        } else return ing.test(item);
+    }
+
     @Nonnull @Override
     public ItemStack getCraftingResult(@Nonnull CraftInv inv) {
+        root: for(int i = 0; i <= inv.getWidth() - this.width; ++i) {
+            for(int j = 0; j <= inv.getHeight() - this.height; ++j) {
+                if (this.doShrinkCraftingResult(inv, i, j, true)) break root;
+                if (this.doShrinkCraftingResult(inv, i, j, false)) break root;
+            }
+        }
         return this.getRecipeOutput().copy();
+    }
+
+    private boolean doShrinkCraftingResult(CraftInv inv, int offsetX, int offsetY, boolean bl) {
+        for(int i = 0; i < inv.getWidth(); ++i) {
+            for(int j = 0; j < inv.getHeight(); ++j) {
+                int k = i - offsetX;
+                int l = j - offsetY;
+                Ingredient ingredient = Ingredient.EMPTY;
+                if (k >= 0 && l >= 0 && k < this.width && l < this.height) {
+                    if (bl) {
+                        ingredient = this.inputs.get(this.width - k - 1 + l * this.width);
+                    } else {
+                        ingredient = this.inputs.get(k + l * this.width);
+                    }
+                }
+
+                boolean test = doShrinkCraftingResult(ingredient, inv.getStackInSlot(i + j * inv.getWidth()));
+                if (!test) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    private boolean doShrinkCraftingResult(Ingredient ing, ItemStack item) {
+        if (ing instanceof NBTIngredient) {
+            NBTIngredient nbting = (NBTIngredient)ing;
+            Field field = ObfuscationReflectionHelper.findField(NBTIngredient.class, "stack");
+            if(!nbting.test(item)) return false;
+            try {
+                ItemStack stack = (ItemStack)field.get(nbting);
+                if (stack.getCount() <= item.getCount()) {
+                    item.shrink(stack.getCount());
+                    return true;
+                }
+            } catch (IllegalAccessException e) {
+                MCC.Logger.error(e);
+            }
+            return false;
+        } else return ing.test(item);
     }
 
     @Nonnull @Override

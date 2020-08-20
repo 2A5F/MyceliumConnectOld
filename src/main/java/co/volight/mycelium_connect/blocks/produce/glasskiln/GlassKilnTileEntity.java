@@ -118,9 +118,7 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        ItemStack itemstack = getStackInSlot(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+    public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
         if (index == slotOutput) output = stack;
         else if (index == slotFuel) fuel = stack;
         else items.setInventorySlotContents(index - invItemsOffset, stack);
@@ -152,7 +150,7 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
         this.data.fuelTime = nbt.getInt("FuelTime");
         this.data.cookTime = nbt.getInt("CookTime");
         this.data.cookTimeTotal = nbt.getInt("CookTimeTotal");
-        this.data.isCooking = nbt.getBoolean("isCooking");
+        this.data.isCooking = nbt.getBoolean("IsCooking");
         this.items = new CraftInv(invWidth, invHeight, this).LoadFromNBT(nbt);
         this.fuel = readItem(nbt, "Fuel");
         this.output = readItem(nbt, "Output");
@@ -162,10 +160,10 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
     @Nonnull @Override
     public CompoundNBT write(CompoundNBT nbt) {
         super.write(nbt);
-        nbt.putInt("BurnTime", this.data.burnTime);
-        nbt.putInt("FuelTime", this.data.fuelTime);
-        nbt.putInt("CookTime", this.data.cookTime);
-        nbt.putInt("CookTimeTotal", this.data.cookTimeTotal);
+        nbt.putShort("BurnTime", (short) this.data.burnTime);
+        nbt.putShort("FuelTime", (short) this.data.fuelTime);
+        nbt.putShort("CookTime", (short) this.data.cookTime);
+        nbt.putShort("CookTimeTotal", (short) this.data.cookTimeTotal);
         nbt.putBoolean("IsCooking", this.data.isCooking);
         this.items.SaveToNBT(nbt);
         writeItem(nbt, "Fuel", this.fuel);
@@ -179,11 +177,10 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
     }
 
     private void writeItem(CompoundNBT nbt, String name, ItemStack item) {
-        if (!item.isEmpty()) {
-            CompoundNBT itemNbt = new CompoundNBT();
-            item.write(itemNbt);
-            nbt.put(name, itemNbt);
-        }
+        if (item.isEmpty()) return;
+        CompoundNBT itemNbt = new CompoundNBT();
+        item.write(itemNbt);
+        nbt.put(name, itemNbt);
     }
 
     public static int getBurnTime(ItemStack fuel) {
@@ -290,14 +287,11 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
         // if (!this.world.isRemote) {
         //     this.setRecipeUsed(recipe);
         // }
-
-        items.shrink(1);
+        recipe.getCraftingResult(items);
     }
 
     @Override
     public void markDirty() {
         super.markDirty();
-
-
     }
 }

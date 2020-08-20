@@ -7,12 +7,12 @@
   "key": {
     "X": {
       "type": "forge:nbt",
-      "item": "mycelium_connect:glass_dust",
+      "item": "mycelium_connect:glass_shards",
       "count": 3
     }
   },
   "result": {
     "item": "mycelium_connect:glass_nugget"
   },
-  "cookingtime": 30
+  "cookingtime": 60
 }

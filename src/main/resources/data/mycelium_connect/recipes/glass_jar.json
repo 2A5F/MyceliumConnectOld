@@ -1,9 +1,9 @@
 {
   "type": "mycelium_connect:glass_kiln_smelting",
-  "group": "minecraft:glass",
+  "group": "mycelium_connect:glass_jar",
   "pattern": [
-    "XX",
-    "XX"
+    "X X",
+    " X "
   ],
   "key": {
     "X": {
@@ -11,7 +11,7 @@
     }
   },
   "result": {
-    "item": "minecraft:glass"
+    "item": "mycelium_connect:glass_jar"
   },
   "cookingtime": 100
 }
