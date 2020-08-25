@@ -324,7 +324,7 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ISidedInv
         } else if (index == slotFuel) {
             return isFuel(stack);
         } else {
-            return true;
+            return !this.data.isCooking;
         }
     }
 
