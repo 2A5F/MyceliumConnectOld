@@ -10,9 +10,12 @@ import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -30,7 +33,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class GlassKilnTileEntity extends LockableTileEntity implements ITickableTileEntity, CraftInv.OnCraftMatrixChanged {
+public class GlassKilnTileEntity extends LockableTileEntity implements ISidedInventory, ITickableTileEntity, CraftInv.OnCraftMatrixChanged {
     public static final String name = GlassKiln.name;
     public static final TileEntityType<GlassKilnTileEntity> type = TileEntityType.Builder.create(GlassKilnTileEntity::new, MCCBlocks.glassKiln).build(null);
     static { type.setRegistryName(MCC.ID, name); }
@@ -293,5 +296,39 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ITickable
     @Override
     public void markDirty() {
         super.markDirty();
+    }
+
+    @Nonnull @Override
+    public int[] getSlotsForFace(@Nonnull Direction side) {
+        if (side == Direction.DOWN) {
+            return SLOTS_DOWN;
+        } else {
+            return side == Direction.UP ? SLOTS_UP : SLOTS_HORIZONTAL;
+        }
+    }
+
+    @Override
+    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nullable Direction direction) {
+        return this.isItemValidForSlot(index, itemStackIn);
+    }
+
+    @Override
+    public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull Direction direction) {
+        return direction != Direction.DOWN || index != 1;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        if (index == slotOutput) {
+            return false;
+        } else if (index == slotFuel) {
+            return isFuel(stack);
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isFuel(ItemStack stack) {
+        return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
     }
 }

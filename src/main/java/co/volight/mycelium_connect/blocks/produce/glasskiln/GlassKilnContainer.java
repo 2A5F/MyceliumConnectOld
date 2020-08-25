@@ -24,6 +24,7 @@ import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class GlassKilnContainer extends RecipeBookContainer<IInventory> implements INeedFuel, ICanGnite {
     public static final String name = GlassKiln.name;
@@ -214,7 +215,17 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
                 }
                 targetSlot.onSlotChange(targetItem, result);
             } else if (index != getFuelSlot() && Arrays.stream(itemsSlots).noneMatch(x -> x == index)) {
-                if (this.isFuel(targetItem)) {
+                int si = Arrays.stream(itemsSlots)
+                        .filter(i -> {
+                            Slot slot = inventorySlots.get(i);
+                            ItemStack s = slot.getStack();
+                            return s.isEmpty() || s.isItemEqual(targetItem);
+                        }).findAny().orElse(-1);
+                if (si > -1) {
+                    if (!this.mergeItemStack(targetItem, GlassKilnTileEntity.invItemsOffset, size, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (this.isFuel(targetItem)) {
                     if (!this.mergeItemStack(targetItem, getFuelSlot(), getFuelSlot() + 1, false)) {
                         return ItemStack.EMPTY;
                     }
