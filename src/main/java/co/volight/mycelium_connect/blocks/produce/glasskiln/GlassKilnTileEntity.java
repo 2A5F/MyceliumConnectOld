@@ -7,6 +7,9 @@ import co.volight.mycelium_connect.api.ICanGnite;
 import co.volight.mycelium_connect.inventorys.CraftInv;
 import co.volight.mycelium_connect.msg.GniteMsg;
 import co.volight.mycelium_connect.recipes.GlassKilnSmeltingRecipe;
+import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -26,12 +29,17 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 public class GlassKilnTileEntity extends LockableTileEntity implements ISidedInventory, ITickableTileEntity, CraftInv.OnCraftMatrixChanged {
     public static final String name = GlassKiln.name;
@@ -308,13 +316,13 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ISidedInv
     }
 
     @Override
-    public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, @Nullable Direction direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
+    public boolean canInsertItem(int index, @Nonnull ItemStack stack, @Nullable Direction direction) {
+        return isItemValidForSlot(index, stack);
     }
 
     @Override
     public boolean canExtractItem(int index, @Nonnull ItemStack stack, @Nonnull Direction direction) {
-        return direction != Direction.DOWN || index != 1;
+        return direction != Direction.DOWN || index != slotFuel;
     }
 
     @Override
@@ -324,11 +332,28 @@ public class GlassKilnTileEntity extends LockableTileEntity implements ISidedInv
         } else if (index == slotFuel) {
             return isFuel(stack);
         } else {
-            return !this.data.isCooking;
+            ItemStack s = this.items.getStackInSlot(index - invItemsOffset);
+            return !this.data.isCooking && s.isItemEqual(stack);
         }
     }
 
     public static boolean isFuel(ItemStack stack) {
         return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
+    }
+
+    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
+
+    @Override
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(@Nonnull net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing == Direction.UP)
+                return handlers[0].cast();
+            else if (facing == Direction.DOWN)
+                return handlers[1].cast();
+            else
+                return handlers[2].cast();
+        }
+        return super.getCapability(capability, facing);
     }
 }
