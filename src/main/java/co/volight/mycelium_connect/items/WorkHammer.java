@@ -113,7 +113,7 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem, R
     protected Random rand = new Random();
 
     public WorkHammer(IItemTier tier, int attackDamage, float attackSpeed, Properties properties) {
-        super(tier, properties);
+        super(tier, properties.setNoRepair());
         this.attackDamage = (float)attackDamage + tier.getAttackDamage();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, // generic.attack_damage
@@ -125,6 +125,16 @@ public class WorkHammer extends TieredItem implements IVanishable, IForgeItem, R
 
     public float getAttackDamage() {
         return this.attackDamage;
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, @Nonnull ItemStack repair) {
+        return false;
+    }
+
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return false;
     }
 
     @Override
