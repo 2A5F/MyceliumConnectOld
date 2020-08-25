@@ -47,7 +47,6 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         this(id, playerInventory, new GlassKilnInv(), new GlassKilnData());
     }
 
-    private Inventory previewInv = new Inventory(1);
     public GlassKilnContainer(int id, PlayerInventory playerInventory, IInventory selfInventory, GlassKilnData data) {
         super(type, id);
         assertInventorySize(selfInventory, size);
@@ -62,7 +61,6 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
                 this.addSlot(new LockableSlot(selfInventory, x + y * width + GlassKilnTileEntity.invItemsOffset, 20 + x * 18, 17 + y * 18, this::isCooking));
             }
         }
-        this.addSlot(new LockableSlot(previewInv, 0, 136, 52, () -> true));
 
         for(int i = 0; i < playBagHeight; ++i) {
             for(int j = 0; j < playBagWidth; ++j) {
@@ -82,6 +80,7 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         super.detectAndSendChanges();
     }
 
+    public ItemStack previewItem = ItemStack.EMPTY;
     public boolean canMade = false;
     @OnlyIn(Dist.CLIENT)
     public void tick() {
@@ -90,11 +89,11 @@ public class GlassKilnContainer extends RecipeBookContainer<IInventory> implemen
         CraftInv items = inv.getItems();
         IRecipe<CraftInv> recipe = this.world.getRecipeManager().getRecipe(recipeType, items, this.world).orElse(null);
         if (recipe == null) {
-            previewInv.setInventorySlotContents(0, ItemStack.EMPTY);
+            previewItem = ItemStack.EMPTY;
             canMade = false;
         } else {
             ItemStack preview = recipe.getRecipeOutput();
-            previewInv.setInventorySlotContents(0, preview);
+            previewItem = preview;
             canMade = !preview.isEmpty();
         }
     }

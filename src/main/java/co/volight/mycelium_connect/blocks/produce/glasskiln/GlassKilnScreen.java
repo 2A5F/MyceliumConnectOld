@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.recipebook.*;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -81,6 +82,20 @@ public class GlassKilnScreen extends ContainerScreen<GlassKilnContainer> impleme
 
         // func_230459_a_ := void drawMouseoverTooltip(MatrixStack matrices, int x, int y)
         this.func_230459_a_(matrices, mouseX, mouseY);
+
+        this.drawItemStack(this.container.previewItem, 136, 52, "");
+    }
+
+    private void drawItemStack(ItemStack stack, int x, int y, String altText) {
+        RenderSystem.translatef(0.0F, 0.0F, 32.0F);
+        this.setBlitOffset(200);
+        this.itemRenderer.zLevel = 200.0F;
+        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
+        if (font == null) font = this.font;
+        this.itemRenderer.renderItemAndEffectIntoGUI(stack, x + this.guiLeft, y + guiTop);
+        this.itemRenderer.renderItemOverlayIntoGUI(font, stack, x + this.guiLeft, y + guiTop, altText);
+        this.setBlitOffset(0);
+        this.itemRenderer.zLevel = 0.0F;
     }
 
     @Override
